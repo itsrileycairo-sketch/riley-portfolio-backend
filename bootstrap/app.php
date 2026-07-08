@@ -12,11 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
-    })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
-        );
+  ->withMiddleware(function (Middleware $middleware) {
+    $middleware->statefulApi(); // Ini biar santai nanganin request API
+    $middleware->validateCsrfTokens(except: [
+        'api/*', // Biar API nggak minta token CSRF yang ribet
+    ]);
+})
     })->create();
