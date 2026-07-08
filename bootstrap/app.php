@@ -14,11 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->statefulApi();
-        $middleware->validateCsrfTokens(except: [
+        
+        // Pakai nama fungsi baru Laravel 11 biar nggak error di VS Code
+        $middleware->preventRequestForgery(except: [
             'api/*',
         ]);
         
-        // PINTU CORS DIBUKA DI SINI:
         $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
