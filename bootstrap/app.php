@@ -12,10 +12,14 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-  ->withMiddleware(function (Middleware $middleware) {
-    $middleware->statefulApi(); // Ini biar santai nanganin request API
+ ->withMiddleware(function (Middleware $middleware) {
+    $middleware->statefulApi();
     $middleware->validateCsrfTokens(except: [
-        'api/*', // Biar API nggak minta token CSRF yang ribet
+        'api/*',
     ]);
+    
+    // TAMBAHKAN BARIS INI UNTUK MEMBUKA PINTU CORS:
+    $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
 })
+
     })->create();
